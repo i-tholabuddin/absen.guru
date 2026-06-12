@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i.tholabuddin</title>
+    <title>i-tholabuddin system</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter & Cinzel -->
@@ -15,12 +15,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Leaflet.js CSS & JS for Interactive Geofencing Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet Map CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
-        window.tailwind = window.tailwind || {};
         tailwind.config = {
             theme: {
                 extend: {
@@ -87,11 +86,9 @@
         .cropper-container {
             max-height: 400px;
         }
-        /* Custom Leaflet Map adjustments */
-        #school-geofence-map {
-            width: 100%;
-            height: 250px;
-            border-radius: 1rem;
+        /* Leaflet Fixes for aesthetics */
+        .leaflet-container {
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
@@ -108,7 +105,7 @@
                     <img id="app-logo" src="" class="hidden w-full h-full object-cover rounded-[inherit]" onerror="this.classList.add('hidden'); document.getElementById('app-logo-fallback').classList.remove('hidden');">
                 </div>
                 <div>
-                    <h1 id="app-title-text" class="font-times font-bold text-sm sm:text-base tracking-wide leading-tight">PPT DIGITAL SYSTEM™</h1>
+                    <h1 id="app-title-text" class="font-times font-bold text-sm sm:text-base tracking-wide leading-tight">PPT DIGITAL SYSTEMS™</h1>
                     <p id="app-subtitle-text" class="font-cinzel text-[10px] sm:text-xs text-emerald-200/80">Pondok Pesantren Tholabuddin</p>
                 </div>
             </div>
@@ -122,8 +119,13 @@
                 </div>
 
                 <!-- Session Logged In Badge -->
-                <div id="session-user-badge" class="hidden flex items-center gap-1.5 bg-white/10 border border-white/10 rounded-full p-1" title="Profil Sesi">
-                    <img id="session-user-photo" src="https://placehold.co/80x80/cbd5e1/64748b?text=..." class="w-5 h-5 rounded-full border border-white/20 object-cover">
+                <div id="session-user-badge" class="hidden flex items-center bg-white/10 border border-white/10 rounded-full pl-2 pr-4 py-1">
+                    <img id="session-user-photo" src="https://placehold.co/80x80/cbd5e1/64748b?text=..." class="w-6 h-6 rounded-full border border-white/20 object-cover">
+                    <!-- Penampung Teks Pengguna yang Bisa Disembunyikan untuk Guru -->
+                    <div id="session-user-text-container" class="text-left">
+                        <p id="session-user-name" class="text-[10px] font-bold leading-none max-w-[100px] truncate">Admin</p>
+                        <p id="session-user-role" class="text-[8px] text-emerald-300 font-semibold uppercase tracking-wider leading-none mt-0.5">ADMIN</p>
+                    </div>
                 </div>
 
                 <!-- Global Action Buttons -->
@@ -132,8 +134,8 @@
                         <i class="fa-solid fa-gears text-[10px]"></i>
                         <span class="hidden sm:inline">Pengaturan</span>
                     </button>
-                    <button id="btn-logout" onclick="handleLogout()" class="hidden bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-rose-900/10">
-                        <i class="fa-solid fa-right-from-bracket text-[14px]"></i>
+                    <button id="btn-logout" onclick="handleLogout()" class="hidden bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-md shadow-rose-900/10">
+                        <i class="fa-solid fa-right-from-bracket text-[13px]"></i>
                         <span class="hidden sm:inline">Keluar</span>
                     </button>
                 </div>
@@ -156,12 +158,12 @@
                     </div>
                     
                     <div class="relative z-10 flex flex-col items-center gap-3">
-                        <div id="login-logo-container" class="w-[74px] h-[74px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-0">
+                        <div id="login-logo-container" class="w-[77px] h-[77px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-0">
                             <i id="login-logo-fallback" class="fa-solid fa-badge-check text-3xl text-emerald-300"></i>
                             <img id="login-logo" src="" class="hidden w-full h-full object-cover rounded-[inherit]" onerror="this.classList.add('hidden'); document.getElementById('login-logo-fallback').classList.remove('hidden');">
                         </div>
                         <div>
-                            <h2 class="text-xl font-cinzel text-center font-extrabold tracking-wide">Selamat Datang </h2>
+                            <h2 class="text-xl font-cinzel extrabold tracking-wide">Selamat Datang </h2>
                             <p class="font-cinzel text-[11px] sm:text-xs text-emerald-100/90 mt-1.5 leading-relaxed tracking-wider uppercase">Absensi Digital Guru Pondok Pesantren Tholabuddin</p>
                         </div>
                     </div>
@@ -179,7 +181,7 @@
 
                 <!-- Form Login -->
                 <form id="form-login" onsubmit="handleLoginSubmit(event)" class="p-8 space-y-5">
-                    <!-- Username / ID Input -->
+                    <!-- Username / NIP Input -->
                     <div class="space-y-1.5">
                         <label id="label-username" class="block text-xs font-bold text-slate-500 uppercase tracking-wider">ID GURU</label>
                         <div class="relative">
@@ -208,7 +210,6 @@
                         Masuk Sistem <i class="fa-solid fa-arrow-right-to-bracket ml-1"></i>
                     </button>
                 </form>
-
             </div>
         </section>
 
@@ -216,14 +217,14 @@
         <!-- VIEW 2: GURU PORTAL (PRESENSI) -->
         <!-- ============================================== -->
         <section id="view-guru" class="hidden space-y-6 max-w-4xl mx-auto transition-all duration-300">
-            <!-- Profil Singkat Guru Aktif -->
+            <!-- Profil Singkat Guru -->
             <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <img id="guru-profile-pic" src="https://placehold.co/120x120/cbd5e1/64748b?text=Foto+Guru" class="w-16 h-16 rounded-full border-2 border-emerald-500 object-cover shadow">
                     <div>
-                        <p id="guru-profile-nip" class="text-xs text-slate-400 mb-1">: -</p>
-                        <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full uppercase mb-1.5">Ustadz</span>
-                        <h2 id="guru-profile-name" class="text-lg font-black text-slate-800 leading-tight">Nama Guru</h2>
+                        <span class="bg-emerald-50 text-emerald-700 border border-emerald-200/50 text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-full uppercase">Ustadz</span>
+                        <h2 id="guru-profile-name" class="text-lg font-black text-slate-800 leading-tight mt-1">Nama Guru</h2>
+                        <p id="guru-profile-nip" class="text-xs text-slate-400 mt-0.5">ID: -</p>
                     </div>
                 </div>
                 
@@ -237,7 +238,7 @@
             <div class="bg-white rounded-3xl shadow-lg border border-slate-100 overflow-hidden relative">
                 <div class="bg-gradient-to-r from-emerald-800 to-teal-800 px-6 py-5 text-white flex justify-between items-center">
                     <div>
-                        <h3 class="font-cinzel text-sm sm:text-base font-bold">ABSENSI GURU PONDOK PESANTREN THOLABUDDIN 1447-1448 H.</h3>
+                        <h3 class="font-extrabold text-sm sm:text-base">Absensi Guru Pondok Pesantren Tholabuddin 1447-1448 H.</h3>
                         <p class="text-[10px] sm:text-xs text-emerald-100/70 mt-0.5">Lakukan presensi mengajar masuk pagi atau masuk sore di bawah ini</p>
                     </div>
                 </div>
@@ -260,7 +261,10 @@
                                     <option value="Hadir jam ke 1&2">Hadir jam ke 1&2</option>
                                     <option value="Hadir jam ke 1">Hadir jam ke 1</option>
                                     <option value="Hadir jam ke 2">Hadir jam ke 2</option>
-                                    <option value="Piket">Piket</option>
+                                    <option value="Piket jam ke 1&2">Piket jam ke 1&2</option>
+                                    <option value="Piket jam ke 1">Piket jam ke 1</option>
+                                    <option value="Piket jam ke 2">Piket jam ke 2</option>
+                                    <option value="Kodlok jam 1&2">Kodlok jam 1&2</option>
                                     <option value="Izin (sakit)">Izin (sakit)</option>
                                     <option value="Izin (ada kepentingan)">Izin (ada kepentingan)</option>
                                     <option value="Izin (ke luar kota)">Izin (ke luar kota)</option>
@@ -270,7 +274,7 @@
                             </div>
                         </div>
 
-                        <!-- Kolom Izin Lainnya (Muncul Dinamis) -->
+                        <!-- Kolom Izin Lainnya -->
                         <div id="wrapper-izin-lainnya" class="hidden transition-all duration-300">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tuliskan Alasan Izin Lainnya</label>
                             <input type="text" id="absen-izin-manual" placeholder="Ketik alasan izin anda secara lengkap..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
@@ -292,7 +296,7 @@
 
                         <!-- Panel Eksekusi & Sesi Info -->
                         <div class="pt-4 border-t border-slate-100 flex flex-col items-center gap-4">
-                            <!-- Informasi Jadwal Masuk Aktif -->
+                            <!-- Informasi Jadwal Masuk Hack -->
                             <div class="text-xs text-slate-500 bg-slate-50 border border-slate-100 px-4 py-2 rounded-2xl text-center w-full max-w-md">
                                 <span class="font-extrabold text-emerald-700 block mb-1">Jadwal Masuk:</span>
                                 <div class="grid grid-cols-2 gap-2 text-[10px]">
@@ -302,13 +306,13 @@
                             </div>
 
                             <div class="flex flex-col gap-3 w-full max-w-sm">
-                                <!-- Tombol Absen MASUK (Utama) -->
+                                <!-- Tombol Absen MASUK -->
                                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-6 rounded-2xl text-sm transition-all duration-200 shadow-md shadow-emerald-950/10 active:scale-[0.98] flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-fingerprint text-lg"></i>
                                     Kirim Absen MASUK
                                 </button>
 
-                                <!-- Tombol Absen PULANG (Tengah Bawah) -->
+                                <!-- Tombol Absen PULANG -->
                                 <button type="button" onclick="handleAbsenPulangClick()" class="mx-auto w-48 bg-rose-600 hover:bg-rose-700 text-white font-bold py-1.5 px-3 rounded-full text-[10px] transition-all duration-200 shadow-sm shadow-rose-950/10 active:scale-[0.98] flex items-center justify-center gap-1.5">
                                     <i class="fa-solid fa-right-from-bracket text-[9px]"></i>
                                     Kirim Absen PULANG
@@ -319,7 +323,7 @@
                 </div>
             </div>
 
-            <!-- Log Kehadiran Hari Ini -->
+            <!-- Log Kehadiran Guru Hari Ini -->
             <div class="bg-white rounded-3xl shadow-md border border-slate-100 p-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
                     <div>
@@ -343,74 +347,6 @@
                             <!-- Diisi Dinamis oleh JS -->
                             <tr>
                                 <td colspan="4" class="p-6 text-center text-slate-400 text-xs">Belum ada aktivitas presensi hari ini.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Riwayat Absen Selama Satu Tahun -->
-            <div class="bg-white rounded-3xl shadow-md border border-slate-100 p-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-3">
-                    <div>
-                        <h4 class="font-black text-sm text-slate-800 tracking-wide uppercase">Riwayat Presensi Satu Tahun</h4>
-                        <p class="text-xs text-slate-400">Daftar lengkap kehadiran Anda pada Tahun Hijriyah berjalan (<span id="self-yearly-hijri-label" class="font-extrabold text-emerald-700">- H</span>)</p>
-                    </div>
-                    <!-- Month Filter for Self Year Logs -->
-                    <div>
-                        <select id="filter-self-month" onchange="renderSelfYearlyHistory()" class="bg-slate-50 border border-slate-200 text-slate-600 rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                            <option value="all">Semua Bulan Hijriyah</option>
-                            <option value="1">1. Muharram</option>
-                            <option value="2">2. Safar</option>
-                            <option value="3">3. Rabi'ul Awal</option>
-                            <option value="4">4. Rabi'ul Akhir</option>
-                            <option value="5">5. Jumadil Ula</option>
-                            <option value="6">6. Jumadil Akhira</option>
-                            <option value="7">7. Rajab</option>
-                            <option value="8">8. Sya'ban</option>
-                            <option value="9">9. Ramadhan</option>
-                            <option value="10">10. Syawal</option>
-                            <option value="11">11. Dzulqa'dah</option>
-                            <option value="12">12. Dzulhijjah</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Stats/Summary of the year -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-                    <div class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-3 text-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Hadir</span>
-                        <span id="self-year-hadir-count" class="text-base font-black text-emerald-700 font-mono">0</span>
-                    </div>
-                    <div class="bg-amber-50/50 border border-amber-100 rounded-2xl p-3 text-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Izin</span>
-                        <span id="self-year-izin-count" class="text-base font-black text-amber-600 font-mono">0</span>
-                    </div>
-                    <div class="bg-rose-50/50 border border-rose-100 rounded-2xl p-3 text-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Terlambat / Alpa</span>
-                        <span id="self-year-late-count" class="text-base font-black text-rose-600 font-mono">0</span>
-                    </div>
-                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3 text-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Jam Belajar</span>
-                        <span id="self-year-hours-count" class="text-base font-black text-slate-700 font-mono">0j</span>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto max-h-[350px]">
-                    <table class="w-full text-sm text-left border-collapse">
-                        <thead class="sticky top-0 bg-white z-10 shadow-sm border-b border-slate-100">
-                            <tr class="text-xs font-bold text-slate-400 uppercase bg-slate-50/50 rounded-lg">
-                                <th class="p-3">Tanggal (Masehi / Hijriyah)</th>
-                                <th class="p-3">Sesi / Tipe</th>
-                                <th class="p-3">Kelas & Mapel</th>
-                                <th class="p-3 text-center">Durasi Mengajar</th>
-                                <th class="p-3 text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbl-history-self-yearly" class="divide-y divide-slate-100">
-                            <!-- Diisi Dinamis oleh JS -->
-                            <tr>
-                                <td colspan="5" class="p-6 text-center text-slate-400 text-xs">Belum ada riwayat presensi tahunan.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -523,7 +459,7 @@
                     <table class="w-full text-sm text-left border-collapse">
                         <thead>
                             <tr class="text-xs font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50 rounded-lg">
-                                <th class="p-3 pr-16">Guru / ID</th>
+                                <th class="p-3 pr-16">Guru / NIP</th>
                                 <th class="p-3">Waktu Log & Tanggal (Masehi / Hijriyah)</th>
                                 <th class="p-3">Kelas & Mapel</th>
                                 <th class="p-3">Sesi Kerja</th>
@@ -536,6 +472,49 @@
                             <!-- Diisi Dinamis oleh JS -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- FITUR: PENGATURAN GEOLOKASI ABSENSI DENGAN PETA INTERAKTIF -->
+            <!-- ============================================================== -->
+            <div class="bg-white rounded-3xl shadow-md border border-slate-100 p-6">
+                <div class="border-b border-slate-100 pb-4 mb-4">
+                    <h4 class="font-black text-sm text-slate-800 tracking-wide uppercase"><i class="fa-solid fa-map-location-dot mr-1.5 text-emerald-600"></i>Pengaturan Titik Pusat & Radius Geofence</h4>
+                    <p class="text-xs text-slate-400">Tentukan batas radius absensi guru menggunakan koordinat peta interaktif di bawah.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Form Koordinat -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Latitude (Lintang)</label>
+                            <input type="number" step="any" id="settings-lat" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-mono" onchange="window.saveGeofenceSettings(false)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Longitude (Bujur)</label>
+                            <input type="number" step="any" id="settings-lng" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-mono" onchange="window.saveGeofenceSettings(false)">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Radius Toleransi Absen (Meter)</label>
+                            <input type="number" id="settings-radius" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-mono" onchange="window.saveGeofenceSettings(false)">
+                        </div>
+
+                        <div class="pt-2 flex flex-col gap-2">
+                            <button onclick="window.detectCurrentLocation()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                                <i class="fa-solid fa-location-crosshairs text-emerald-600"></i> Deteksi Lokasi GPS Saya
+                            </button>
+                            <button onclick="window.saveGeofenceSettings(true)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow shadow-emerald-800/10">
+                                <i class="fa-solid fa-circle-check"></i> Simpan Setelan Radius
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Peta Interaktif (Leaflet Container) -->
+                    <div class="lg:col-span-2 flex flex-col">
+                        <span class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pilih Pusat Lokasi Pada Peta (Klik atau Geser Pin)</span>
+                        <div id="geofence-map" class="w-full h-80 rounded-2xl border border-slate-200 z-0"></div>
+                    </div>
                 </div>
             </div>
 
@@ -624,9 +603,7 @@
                 </div>
             </div>
 
-            <!-- ============================================== -->
-            <!-- PAPAN JADWAL MENGAJAR HARI INI (REAKTIF DINAMIS) -->
-            <!-- ============================================== -->
+            <!-- PAPAN JADWAL MENGAJAR HARI INI -->
             <div class="bg-white rounded-3xl shadow-md border border-slate-100 p-6">
                 <div class="border-b border-slate-100 pb-4 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
@@ -662,7 +639,7 @@
                         <thead>
                             <tr class="text-xs font-bold text-slate-400 uppercase border-b border-slate-100 bg-slate-50/50 rounded-lg">
                                 <th class="p-3">Pasfoto / Guru</th>
-                                <th class="p-3">ID Guru</th>
+                                <th class="p-3">ID</th>
                                 <th class="p-3">Jabatan</th>
                                 <th class="p-3">Bawaan Mengajar (Kelas & Mapel)</th>
                                 <th class="p-3">Password Akses (Edit Langsung)</th>
@@ -692,7 +669,7 @@
 
                         <!-- Logo Upload Row -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <!-- 1. Logo Header Utama -->
+                            <!-- 1. Logo Header -->
                             <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-col items-center text-center">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Logo Header Utama</span>
                                 <div id="setting-logo-header-preview-container" class="w-20 h-20 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center overflow-hidden p-0 mb-3 shadow">
@@ -710,11 +687,11 @@
                                 </div>
                             </div>
 
-                            <!-- 2. Logo Halaman Login -->
+                            <!-- 2. Logo Login -->
                             <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-col items-center text-center">
                                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Logo Halaman Log in</span>
                                 <div id="setting-logo-login-preview-container" class="w-20 h-20 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center overflow-hidden p-0 mb-3 shadow">
-                                    <i id="setting-logo-login-preview-fallback" class="fa-solid fa-graduation-cap text-3xl text-slate-400"></i>
+                                    <i id="setting-logo-login-preview-fallback" class="fa-solid fa-shield-halved text-3xl text-slate-400"></i>
                                     <img id="setting-logo-login-preview" class="hidden w-full h-full object-cover rounded-[inherit]">
                                 </div>
                                 <div class="flex flex-col gap-2 w-full">
@@ -743,42 +720,11 @@
                                 <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Identitas Instansi
                             </button>
                         </div>
-
-                        <!-- Pengaturan Geofencing Lokasi Sekolah Nyata -->
-                        <div class="space-y-4 pt-4 border-t border-slate-100">
-                            <h5 class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-earth-asia text-emerald-600"></i> Pengaturan Geofencing GPS Sekolah
-                            </h5>
-                            <p class="text-[10px] text-slate-400 leading-relaxed">
-                                Atur koordinat lokasi pusat sekolah dan toleransi jarak maksimal dalam meter. Anda dapat **menggeser PIN merah** pada peta atau **mengklik area peta** secara bebas untuk mengubah titik koordinat secara instan.
-                            </p>
-                            
-                            <!-- Leaflet Map Container -->
-                            <div id="school-geofence-map" class="z-0 border border-slate-200 shadow-sm relative"></div>
-
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Latitude Sekolah</label>
-                                    <input type="number" step="any" id="setting-school-lat" oninput="updateMapFromInputs()" placeholder="Contoh: -6.8906" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Longitude Sekolah</label>
-                                    <input type="number" step="any" id="setting-school-lng" oninput="updateMapFromInputs()" placeholder="Contoh: 109.6234" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Radius Batas Toleransi (Meter)</label>
-                                <input type="number" id="setting-school-radius" oninput="updateMapRadiusFromInput()" placeholder="Contoh: 100" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                            </div>
-                            <button onclick="saveSchoolGeofencing()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition active:scale-95">
-                                <i class="fa-solid fa-location-dot mr-1"></i> Simpan Setelan GPS Sekolah
-                            </button>
-                        </div>
                     </div>
 
-                    <!-- Ganti Password Admin & Pengaturan Telegram -->
+                    <!-- Ganti Password Admin & Telegram -->
                     <div class="space-y-6 border-t lg:border-t-0 lg:border-l border-slate-100 pt-6 lg:pt-0 lg:pl-8">
-                        <!-- Ubah Password Admin -->
+                        <!-- Password Admin -->
                         <div class="space-y-4">
                             <h5 class="text-xs font-bold text-emerald-700 uppercase tracking-wider border-b border-emerald-50/80 pb-2 flex items-center gap-1.5">
                                 <i class="fa-solid fa-user-lock"></i> Ubah Password Administrator
@@ -823,13 +769,13 @@
                             </form>
                         </div>
 
-                        <!-- Integrasi Notifikasi Telegram -->
+                        <!-- Notifikasi Telegram -->
                         <div class="space-y-4 pt-4 border-t border-slate-100">
                             <h5 class="text-xs font-bold text-emerald-700 uppercase tracking-wider border-b border-emerald-50/80 pb-2 flex items-center gap-1.5">
                                 <i class="fa-brands fa-telegram text-base text-sky-500"></i> Integrasi Notifikasi Telegram Admin
                             </h5>
                             <p class="text-[10px] text-slate-400 leading-relaxed">
-                                Kirimkan laporan absensi guru otomatis (masuk, pulang, & izin) langsung ke grup atau chat pribadi Telegram Anda.
+                                Kirimkan laporan absensi guru otomatis langsung ke grup atau chat pribadi Telegram Anda.
                             </p>
 
                             <div class="space-y-3">
@@ -870,14 +816,14 @@
 
     <!-- Footer Sistem -->
     <footer class="bg-slate-900 text-slate-400/60 text-[10px] py-4 text-center border-t border-slate-800">
-        <p>© 2026 SADIG. Pondok Pesantren Tholabuddin. All Rights Reserved.</p>
+        <p>© 2026 ASATIDZ. Pondok Pesantren Tholabuddin. All Rights Reserved.</p>
     </footer>
 
     <!-- ============================================== -->
     <!-- DIALOG BOXES & POP-UP MODALS -->
     <!-- ============================================== -->
     
-    <!-- 1. Modal Crop Logo (Rasio 1:1) -->
+    <!-- 1. Modal Crop Logo -->
     <div id="modal-crop-logo" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
             <div class="bg-emerald-800 text-white px-6 py-4 flex justify-between items-center">
@@ -909,7 +855,6 @@
 
                 <!-- Informasi Dasar & Pasfoto -->
                 <div class="flex flex-col sm:flex-row gap-6 items-center">
-                    <!-- Unggah Pasfoto Guru -->
                     <div class="flex flex-col items-center text-center">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Pasfoto Guru</span>
                         <div class="w-24 h-24 rounded-full border-2 border-emerald-500 bg-slate-50 flex items-center justify-center overflow-hidden p-0 shadow relative">
@@ -930,8 +875,8 @@
                                 <input type="text" id="form-guru-name" required placeholder="Contoh: Drs. Budi Santoso" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">ID Guru</label>
-                                <input type="text" id="form-guru-nip" required placeholder="Masukkan ID Guru" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nomor ID (ID)</label>
+                                <input type="text" id="form-guru-nip" required placeholder="Masukkan NIP" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                             </div>
                         </div>
 
@@ -1021,7 +966,7 @@
         </div>
     </div>
 
-    <!-- 3. Modal Edit Log Harian (Oleh Admin) -->
+    <!-- 3. Modal Edit Log Harian -->
     <div id="modal-edit-log" class="hidden fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="bg-emerald-800 text-white px-6 py-4 flex justify-between items-center">
@@ -1082,31 +1027,13 @@
         </div>
 
         <div class="space-y-3 text-[10px]">
-            <!-- Mode Selector GPS -->
+            <!-- GPS Simulator -->
             <div>
-                <span class="font-bold text-slate-400 block mb-1">Mode Deteksi GPS:</span>
-                <div class="flex gap-1 mb-2 bg-slate-800/80 p-0.5 rounded-lg border border-slate-800">
-                    <button id="btn-mode-real" onclick="setGPSMode('real')" class="w-1/2 font-bold py-1 px-1 rounded-md text-[8px] transition uppercase">
-                        Real GPS
-                    </button>
-                    <button id="btn-mode-sim" onclick="setGPSMode('sim')" class="w-1/2 font-bold py-1 px-1 rounded-md text-[8px] transition uppercase">
-                        Simulasi
-                    </button>
-                </div>
-            </div>
-
-            <!-- GPS Simulator Controls -->
-            <div id="sim-gps-controls" class="hidden">
                 <span class="font-bold text-slate-400 block mb-1">Simulasi Radius GPS:</span>
                 <div class="flex gap-1">
                     <button id="btn-gps-in" onclick="setSimulatedGPS(true)" class="w-1/2 bg-emerald-600/20 border border-emerald-500/30 hover:bg-emerald-600/30 text-emerald-400 font-bold py-1 px-2 rounded-lg text-[9px] transition">Di Dalam Radius</button>
                     <button id="btn-gps-out" onclick="setSimulatedGPS(false)" class="w-1/2 bg-rose-600/20 border border-rose-500/30 hover:bg-rose-600/30 text-rose-400 font-bold py-1 px-2 rounded-lg text-[9px] transition">Di Luar Sekolah</button>
                 </div>
-            </div>
-
-            <div id="real-gps-info" class="bg-slate-950 p-2 rounded-xl border border-slate-800 text-slate-400">
-                <span class="font-black text-emerald-400 block mb-0.5"><i class="fa-solid fa-location-crosshairs mr-1"></i> Deteksi Koordinat Nyata</span>
-                <p>Mengukur jarak ponsel Anda langsung ke titik sekolah secara real-time.</p>
             </div>
 
             <!-- Jam Testing -->
@@ -1134,11 +1061,13 @@
     <!-- LOGIKA UTAMA JAVASCRIPT & STATE MANAGEMENT -->
     <!-- ============================================== -->
     <script>
+        const GOOGLE_DRIVE_API_URL = "https://script.google.com/macros/s/AKfycbwznd6UJFvydU6z4bx3d6fwPbh2ilImVKVmVByScUCXRHvM1tLv7VmcaJik34llckBWVA/exec";
+        
         // --- 1. MOCK DATABASE INITIALIZATION ---
         const DEFAULT_TEACHERS = [
             {
                 id: "T1",
-                idCard: "198104122005011002",
+                nip: "198104122005011002",
                 name: "Drs. Budi Santoso",
                 role: "Guru Utama",
                 password: "guru123",
@@ -1156,7 +1085,7 @@
             },
             {
                 id: "T2",
-                idCard: "198511202010032001",
+                nip: "198511202010032001",
                 name: "Ustadzah Fatimah, S.Pd.I",
                 role: "Guru Madya",
                 password: "guru123",
@@ -1174,7 +1103,7 @@
             },
             {
                 id: "T3",
-                idCard: "199208042015021004",
+                nip: "199208042015021004",
                 name: "Ustadz H. Ahmad Fauzi, Lc",
                 role: "Muda Pratama",
                 password: "guru123",
@@ -1196,7 +1125,7 @@
             {
                 id: "R1",
                 teacher_id: "T1",
-                timestamp: "2026-05-25T07:42:00", // Hari Senin (Terlambat 12 menit)
+                timestamp: "2026-05-25T07:42:00", 
                 type: "masuk",
                 session: "pagi",
                 class: "X-A",
@@ -1222,7 +1151,7 @@
             {
                 id: "R3",
                 teacher_id: "T2",
-                timestamp: "2026-05-26T07:45:00", // Hari Selasa (Terlambat 15 menit)
+                timestamp: "2026-05-26T07:45:00", 
                 type: "masuk",
                 session: "pagi",
                 class: "XII MIPA 2",
@@ -1234,47 +1163,41 @@
             }
         ];
 
+        const DEFAULT_GEOFENCE = {
+            lat: -7.250445,
+            lng: 112.768845,
+            radius: 100
+        };
+
         // --- 2. GLOBAL STATE ---
         let teachers = JSON.parse(localStorage.getItem('sadig_teachers')) || DEFAULT_TEACHERS;
         let records = JSON.parse(localStorage.getItem('sadig_records')) || DEFAULT_RECORDS;
+        let configGeofence = JSON.parse(localStorage.getItem('sadig_geofence')) || DEFAULT_GEOFENCE;
         let currentUser = JSON.parse(localStorage.getItem('sadig_session')) || null;
         
         let loginRole = 'guru'; 
         let reportTab = 'weekly'; 
         
-        // Geofencing Real Config (PP Tholabuddin Pekalongan Batang)
-        let schoolConfig = JSON.parse(localStorage.getItem('sadig_school_config')) || {
-            lat: -6.8906, 
-            lng: 109.6234,
-            radius: 100 // meter
-        };
-
-        // Interactive Leaflet Map Instances
-        let schoolMap = null;
-        let schoolMarker = null;
-        let geofenceCircle = null;
-
         // Developer Simulator States
         let simulatedTime = localStorage.getItem('sadig_sim_time') || null; 
         let simulatedGPS = localStorage.getItem('sadig_sim_gps') !== 'false'; 
-        let gpsMode = localStorage.getItem('sadig_gps_mode') || 'sim'; // default 'sim'
 
-        // Cropper JS instances
+        // Cropper JS & Map instances
         let currentCropper = null;
         let cropTargetType = 'header'; 
         let tempGuruFile = null;
-
-        // UI Components
         let donutChart = null;
 
-        // --- 2.1 BROADCASTCHANNEL FOR MULTI-TAB REALTIME NOTIFICATIONS ---
+        // Leaflet Map State
+        let mapInstance = null;
+        let mapMarker = null;
+        let mapCircle = null;
+
+        // BroadcastChannel for realtime notifications
         const notifyChannel = new BroadcastChannel('sadig_notifications');
 
-        // Listen for realtime notifications
         notifyChannel.onmessage = function(event) {
             const { type, message, sender } = event.data;
-            
-            // If admin is currently logged in, show realtime toast alert & refresh views
             if (currentUser && currentUser.role === 'ADMIN') {
                 showToast(`🔔 ${message}`, 'success');
                 renderAdminPortal();
@@ -1287,99 +1210,11 @@
             "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulqa'dah", "Dzulhijjah"
         ];
 
-        // Menghitung Jumlah Tatap Muka (TM)
         function getJumlahTatapMuka(status) {
             if (!status) return 0;
-            if (status.includes("1&2") || status.includes("1 & 2")) return 2;
-            if (status.includes("jam ke 1") || status.includes("jam ke 2") || status.includes("Hadir 1") || status.includes("Hadir 2")) return 1;
-            if (status === "Piket") return 2; 
-            return 0; 
-        }
-
-        // Menghitung Jarak dengan Formula Haversine (Sangat Akurat)
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371e3; // Radius bumi dalam meter
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c; 
-        }
-
-        // Mengambil Lokasi GPS Fisik secara Asinkronus
-        function getCurrentPhysicalLocation() {
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    reject("Browser Anda tidak mendukung layanan deteksi lokasi / GPS.");
-                    return;
-                }
-                const options = {
-                    enableHighAccuracy: true,
-                    timeout: 12000, 
-                    maximumAge: 0
-                };
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        resolve({
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            accuracy: position.coords.accuracy
-                        });
-                    },
-                    (error) => {
-                        let errorMsg = "Gagal melacak titik GPS ponsel Anda.";
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMsg = "Izin akses lokasi ditolak browser. Tolong aktifkan GPS di pengaturan ponsel Anda.";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMsg = "Sinyal GPS tidak stabil atau tidak akurat. Silakan cari ruang terbuka.";
-                                break;
-                            case error.TIMEOUT:
-                                errorMsg = "Waktu tunggu pencarian lokasi GPS habis. Silakan muat ulang halaman.";
-                                break;
-                        }
-                        reject(errorMsg);
-                    },
-                    options
-                );
-            });
-        }
-
-        // Fungsi Validasi Lokasi Sebelum Absen Berdasarkan Pengaturan Mode
-        async function validateGeofencingAccess() {
-            if (gpsMode === 'sim') {
-                return {
-                    success: simulatedGPS,
-                    locationInfo: simulatedGPS ? "Dalam Radius Sekolah (Simulasi)" : "Di Luar Sekolah (Simulasi)"
-                };
-            } else {
-                try {
-                    showToast("Sedang memproses verifikasi lokasi GPS...", "info");
-                    const userLocation = await getCurrentPhysicalLocation();
-                    const distance = calculateDistance(
-                        userLocation.lat, 
-                        userLocation.lng, 
-                        schoolConfig.lat, 
-                        schoolConfig.lng
-                    );
-                    
-                    const isInside = distance <= schoolConfig.radius;
-                    const logLocInfo = isInside 
-                        ? `Dalam Radius Sekolah (${distance.toFixed(1)}m, Akurasi: ${userLocation.accuracy.toFixed(1)}m)` 
-                        : `Di Luar Sekolah (${distance.toFixed(1)}m, Akurasi: ${userLocation.accuracy.toFixed(1)}m)`;
-
-                    return {
-                        success: isInside,
-                        locationInfo: logLocInfo,
-                        distance: distance
-                    };
-                } catch (error) {
-                    throw error;
-                }
-            }
+            if (status.includes('1&2')) return 2;
+            if (status.includes('1') || status.includes('2')) return 1;
+            return 0;
         }
 
         function getHijriParts(dateObj) {
@@ -1426,40 +1261,6 @@
             return `${h.day} ${h.monthName} ${h.year} H`;
         }
 
-        // --- GEMINI LLM API SYSTEM INTEGRATION ---
-        async function callGeminiAPI(prompt, systemInstruction = "") {
-            const apiKey = ""; // Leave as empty string so Canvas handles injected API key automatically
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
-            };
-
-            let delay = 1000;
-            for (let i = 0; i < 4; i++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (response.status === 429) {
-                        throw new Error("API Limit exceeded");
-                    }
-                    if (!response.ok) {
-                        throw new Error(`HTTP Error: ${response.status}`);
-                    }
-                    const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                } catch (error) {
-                    if (i === 3) throw error;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
-            }
-        }
-
         function getActiveTime() {
             const now = new Date();
             if (simulatedTime) {
@@ -1503,7 +1304,7 @@
             return !!(todaySchedule && todaySchedule.class && todaySchedule.subject);
         }
 
-        // --- 4. EXPLICIT GLOBAL FUNCTIONS (PREVENT REFERENCEERRORS) ---
+        // --- 4. EXPLICIT GLOBAL FUNCTIONS ---
         window.switchView = function(viewName) {
             document.getElementById('view-login').classList.add('hidden');
             document.getElementById('view-guru').classList.add('hidden');
@@ -1549,8 +1350,8 @@
             if (role === 'guru') {
                 tabGuru.className = "w-1/2 py-3 text-sm font-bold text-center border-b-2 border-emerald-600 text-emerald-600 transition-all duration-200";
                 tabAdmin.className = "w-1/2 py-3 text-sm font-bold text-center border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all duration-200";
-                labelUser.textContent = "ID GURU / NIP";
-                inputUser.placeholder = "Masukkan NIP anda";
+                labelUser.textContent = "ID GURU";
+                inputUser.placeholder = "Masukkan ID anda";
             } else {
                 tabAdmin.className = "w-1/2 py-3 text-sm font-bold text-center border-b-2 border-emerald-600 text-emerald-600 transition-all duration-200";
                 tabGuru.className = "w-1/2 py-3 text-sm font-bold text-center border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all duration-200";
@@ -1621,20 +1422,14 @@
                     showToast('Username atau password Admin salah.', 'error');
                 }
             } else {
-                const foundTeacher = teachers.find(t => (t.idCard === userVal || t.nip === userVal) && t.password === passVal);
+                const foundTeacher = teachers.find(t => t.nip === userVal && t.password === passVal);
                 if (foundTeacher) {
-                    currentUser = { 
-                        id: foundTeacher.id, 
-                        name: foundTeacher.name, 
-                        role: 'GURU', 
-                        nip: foundTeacher.nip || foundTeacher.idCard, 
-                        photo: foundTeacher.photo 
-                    };
+                    currentUser = { id: foundTeacher.id, name: foundTeacher.name, role: 'USTADZ', nip: foundTeacher.nip, photo: foundTeacher.photo };
                     localStorage.setItem('sadig_session', JSON.stringify(currentUser));
                     showToast(`Ahlan wa Sahlan, ${foundTeacher.name}`, 'success');
                     switchView('guru');
                 } else {
-                    showToast('NIP atau Password Guru tidak sesuai.', 'error');
+                    showToast('ID atau Password Guru tidak sesuai.', 'error');
                 }
             }
             updateIdentityHeader();
@@ -1645,47 +1440,45 @@
             const pic = document.getElementById('session-user-photo');
             const name = document.getElementById('session-user-name');
             const role = document.getElementById('session-user-role');
+            const textContainer = document.getElementById('session-user-text-container');
 
             if (currentUser) {
-                if (badge) badge.classList.remove('hidden');
-                if (pic) pic.src = currentUser.photo || 'https://placehold.co/80x80/cbd5e1/64748b?text=U';
-                if (name) name.textContent = currentUser.name;
-                if (role) role.textContent = currentUser.role;
+                badge.classList.remove('hidden');
+                pic.src = currentUser.photo || 'https://placehold.co/80x80/cbd5e1/64748b?text=U';
+                
+                if (currentUser.role === 'USTADZ') {
+                    if (textContainer) textContainer.classList.add('hidden');
+                    badge.className = "hidden flex items-center bg-white/10 border border-white/10 rounded-full p-1";
+                    badge.classList.remove('hidden');
+                } else {
+                    if (textContainer) textContainer.classList.remove('hidden');
+                    badge.className = "hidden flex items-center gap-2 bg-white/10 border border-white/10 rounded-full pl-2 pr-4 py-1";
+                    badge.classList.remove('hidden');
+                    name.textContent = currentUser.name;
+                    role.textContent = currentUser.role;
+                }
             } else {
-                if (badge) badge.classList.add('hidden');
+                badge.classList.add('hidden');
             }
         }
 
         // --- 7. GURU PORTAL LOGIC ---
         function renderSelfPortal() {
-            if (!currentUser || currentUser.role !== 'GURU') return;
+            if (!currentUser || currentUser.role !== 'USTADZ') return;
             
             const matchingTeacher = teachers.find(t => t.id === currentUser.id);
             if (matchingTeacher) {
-                const profilePic = document.getElementById('guru-profile-pic');
-                const profileName = document.getElementById('guru-profile-name');
-                const profileIdCard = document.getElementById('guru-profile-nip');
-
-                if (profilePic) {
-                    profilePic.src = matchingTeacher.photo || 'https://placehold.co/120x120/cbd5e1/64748b?text=G';
-                }
-                if (profileName) {
-                    profileName.textContent = matchingTeacher.name;
-                }
-                if (profileIdCard) {
-                    profileIdCard.textContent = `ID: ${matchingTeacher.nip || matchingTeacher.idCard || '-'}`;
-                }
+                document.getElementById('guru-profile-pic').src = matchingTeacher.photo || 'https://placehold.co/120x120/cbd5e1/64748b?text=G';
+                document.getElementById('guru-profile-name').textContent = matchingTeacher.name;
+                document.getElementById('guru-profile-nip').textContent = `ID: ${matchingTeacher.nip}`;
             }
 
             const selectGuru = document.getElementById('absen-guru-id');
-            if (selectGuru) {
-                selectGuru.innerHTML = `<option value="${currentUser.id}">${currentUser.name}</option>`;
-                selectGuru.disabled = true;
-            }
+            selectGuru.innerHTML = `<option value="${currentUser.id}">${currentUser.name}</option>`;
+            selectGuru.disabled = true;
 
             handleAbsenTeacherSelect(currentUser.id);
             renderSelfHistory();
-            renderSelfYearlyHistory(); 
         }
 
         window.handleStatusHadirChange = function(status) {
@@ -1705,7 +1498,7 @@
                 inputManual.required = false;
             }
 
-            if (status === 'Piket') {
+            if (status.startsWith('Piket')) {
                 classInput.value = "Ruang Piket";
                 subjectInput.value = "Piket / Pengawasan";
             } else {
@@ -1789,7 +1582,7 @@
             }
         }
 
-        window.handleAbsenSubmit = async function(e) {
+        window.handleAbsenSubmit = function(e) {
             e.preventDefault();
             const now = getActiveTime();
 
@@ -1809,60 +1602,44 @@
             let izinReason = "";
 
             const isIzinMode = logStatus.startsWith("Izin") || logStatus === "Izin lainnya (tulis)";
-            const isPiket = logStatus === "Piket";
+            const isPiket = logStatus.startsWith("Piket");
+            const isKodlok = logStatus.startsWith("Kodlok");
 
-            if (!isIzinMode && !isPiket && !hasScheduleToday(teacherId, now)) {
+            // Bypassed scheduling constraints for Izin, Piket, and Kodlok
+            if (!isIzinMode && !isPiket && !isKodlok && !hasScheduleToday(teacherId, now)) {
                 showToast("Absen Ditolak! Anda tidak memiliki jadwal mengajar pada hari ini.", "error");
                 return;
             }
 
-            let checkResult = { success: true, locationInfo: "Layanan GPS Dilewati" };
-            if (!isIzinMode) {
-                const btnSubmit = e.target.querySelector('button[type="submit"]');
-                try {
-                    if (btnSubmit) {
-                        btnSubmit.disabled = true;
-                        btnSubmit.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Memvalidasi GPS...`;
-                    }
-                    checkResult = await validateGeofencingAccess();
-                } catch (gpsError) {
-                    showToast(gpsError, "error");
-                    if (btnSubmit) {
-                        btnSubmit.disabled = false;
-                        btnSubmit.innerHTML = `<i class="fa-solid fa-fingerprint text-lg"></i> Kirim Absen MASUK`;
-                    }
-                    return;
-                } finally {
-                    if (btnSubmit) {
-                        btnSubmit.disabled = false;
-                        btnSubmit.innerHTML = `<i class="fa-solid fa-fingerprint text-lg"></i> Kirim Absen MASUK`;
-                    }
-                }
-
-                if (!checkResult.success) {
-                    showToast(`Presensi Ditolak! Anda terdeteksi berada di luar sekolah. Jarak: ${checkResult.distance ? `${checkResult.distance.toFixed(0)} meter` : 'Tidak terdeteksi'}.`, "error");
-                    return;
-                }
+            // GEOFENCING VALIDATION (Bypassed for Izin ONLY now, Kodlok MUST be within radius)
+            if (!isIzinMode && !simulatedGPS) {
+                showToast("Presensi Ditolak! Anda terdeteksi berada di luar radius lokasi sekolah.", "error");
+                return;
             }
 
-            if (isIzinMode) {
+            // ATURAN WAKTU DAN SESI PINTAR
+            if (isIzinMode || isKodlok) {
+                // Guru yang Izin ATAU Kodlok dapat absen kapan saja (Tanpa Batasan Jam Sesi Kerja Ketat)
                 session = currentMinutes < 720 ? "pagi" : "sore"; 
-                izinReason = logStatus === 'Izin lainnya (tulis)' 
-                    ? (document.getElementById('absen-izin-manual').value || "Izin Lainnya")
-                    : logStatus;
-                logStatus = "Izin";
+                if (isIzinMode) {
+                    izinReason = logStatus === 'Izin lainnya (tulis)' 
+                        ? (document.getElementById('absen-izin-manual').value || "Izin Lainnya")
+                        : logStatus;
+                    logStatus = "Izin";
+                }
             } else {
+                // Guru reguler wajib mematuhi jam operasional ketat
                 if (currentMinutes >= 450 && currentMinutes < 810) { 
                     session = "pagi";
                     if (currentMinutes >= 660) {
                         logStatus = "Tidak Hadir";
                     } else {
-                        if (logStatus.startsWith("Hadir") || logStatus === "Piket") {
+                        if (logStatus.startsWith("Hadir") || logStatus.startsWith("Piket")) {
                             if (currentMinutes >= 450 && currentMinutes <= 535) { 
-                                if (logStatus !== "Piket") logStatus = "Hadir 1&2";
+                                if (!logStatus.startsWith("Piket")) logStatus = "Hadir 1&2";
                                 if (currentMinutes > 450) lateMinutes = currentMinutes - 450;
                             } else if (currentMinutes >= 540 && currentMinutes <= 650) { 
-                                if (logStatus !== "Piket") logStatus = "Hadir 2";
+                                if (!logStatus.startsWith("Piket")) logStatus = "Hadir 2";
                                 if (currentMinutes > 570) lateMinutes = currentMinutes - 570;
                             }
                         }
@@ -1872,7 +1649,7 @@
                     if (currentMinutes >= 990) {
                         logStatus = "Tidak Hadir";
                     } else {
-                        if (logStatus.startsWith("Hadir") || logStatus === "Piket") {
+                        if (logStatus.startsWith("Hadir") || logStatus.startsWith("Piket")) {
                             if (currentMinutes >= 810 && currentMinutes <= 885) { 
                                 if (currentMinutes > 810) lateMinutes = currentMinutes - 810;
                             } else if (currentMinutes > 915 && currentMinutes < 990) { 
@@ -1913,7 +1690,7 @@
                 status: logStatus,
                 izin_reason: izinReason, 
                 late_minutes: lateMinutes,
-                location: checkResult.locationInfo,
+                location: simulatedGPS ? "Dalam Radius Sekolah" : "Di Luar Sekolah",
                 hijri: getHijriParts(now)
             };
 
@@ -1923,8 +1700,7 @@
             const successMsg = `Absen MASUK ${session.toUpperCase()} berhasil direkam!`;
             showToast(successMsg, 'success');
 
-            // --- MULTI-TAB BROADCAST & TELEGRAM ALERT ---
-            const alertText = `📝 <b>Absensi Masuk Baru</b>\n\n👤 Nama: <b>${teacherObj.name}</b>\n⏰ Waktu: ${now.toLocaleTimeString('id-ID')} WIB\n📅 Sesi: ${session.toUpperCase()}\n📖 Kelas / Mapel: ${classVal} / ${mapelVal}\n📋 Status: <b>${logStatus}</b>${lateMinutes ? ` (Terlambat ${lateMinutes} Menit)` : ''}${izinReason ? `\n💬 Keterangan: ${izinReason}` : ''}\n📍 Lokasi: <i>${checkResult.locationInfo}</i>`;
+            const alertText = `📝 <b>Absensi Masuk Baru</b>\n\n👤 Nama: <b>${teacherObj.name}</b>\n⏰ Waktu: ${now.toLocaleTimeString('id-ID')} WIB\n📅 Sesi: ${session.toUpperCase()}\n📖 Kelas / Mapel: ${classVal} / ${mapelVal}\n📋 Status: <b>${logStatus}</b>${lateMinutes ? ` (Terlambat ${lateMinutes} Menit)` : ''}${izinReason ? `\n💬 Keterangan: ${izinReason}` : ''}`;
             
             notifyChannel.postMessage({
                 type: 'absen_masuk',
@@ -1934,14 +1710,14 @@
             sendTelegramAlert(alertText);
 
             document.getElementById('absen-izin-manual').value = "";
-            if (currentUser.role === 'GURU') {
+            if (currentUser.role === 'USTADZ') {
                 renderSelfPortal();
             } else {
                 renderAdminPortal();
             }
         };
 
-        window.handleAbsenPulangClick = async function() {
+        window.handleAbsenPulangClick = function() {
             const now = getActiveTime();
 
             if (now.getDay() === 5) {
@@ -1949,54 +1725,41 @@
                 return;
             }
 
-            const btnPulang = document.querySelector('button[onclick="handleAbsenPulangClick()"]');
-
-            let checkResult = { success: true, locationInfo: "Layanan GPS Dilewati" };
-            try {
-                if (btnPulang) {
-                    btnPulang.disabled = true;
-                    btnPulang.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> GPS...`;
-                }
-                checkResult = await validateGeofencingAccess();
-            } catch (gpsError) {
-                showToast(gpsError, "error");
-                if (btnPulang) {
-                    btnPulang.disabled = false;
-                    btnPulang.innerHTML = `<i class="fa-solid fa-right-from-bracket text-[9px]"></i> Kirim Absen PULANG`;
-                }
+            const teacherId = document.getElementById('absen-guru-id').value;
+            if (!teacherId) {
+                showToast("Pilih nama guru terlebih dahulu.", "error");
                 return;
-            } finally {
-                if (btnPulang) {
-                    btnPulang.disabled = false;
-                    btnPulang.innerHTML = `<i class="fa-solid fa-right-from-bracket text-[9px]"></i> Kirim Absen PULANG`;
-                }
             }
 
-            if (!checkResult.success) {
-                showToast(`Absen Pulang Ditolak! Anda terdeteksi berada di luar radius sekolah. Jarak: ${checkResult.distance ? `${checkResult.distance.toFixed(0)} meter` : 'Tidak terdeteksi'}.`, "error");
+            const currentStatus = document.getElementById('absen-status-hadir').value;
+            const isIzinMode = currentStatus.startsWith("Izin") || currentStatus === "Izin lainnya (tulis)";
+            const isPiket = currentStatus.startsWith("Piket");
+            const isKodlok = currentStatus.startsWith("Kodlok");
+
+            // GPS GEOFENCING check (Bypassed for Izin ONLY now, Kodlok MUST be within radius)
+            if (!isIzinMode && !simulatedGPS) {
+                showToast("Presensi Ditolak! Anda berada di luar radius lokasi sekolah.", "error");
                 return;
             }
 
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
             let session = "";
 
-            if (currentMinutes >= 660 && currentMinutes < 810) { 
-                session = "pagi";
-            } else if (currentMinutes >= 990 && currentMinutes <= 1440) { 
-                session = "sore";
+            // Kodlok and Izin mode also can register check-out dynamically anytime
+            if (isIzinMode || isKodlok) {
+                session = currentMinutes < 720 ? "pagi" : "sore";
             } else {
-                showToast("Sesi Absen PULANG belum dibuka (Pagi mulai 11:00, Sore mulai 16:30).", "error");
-                return;
+                if (currentMinutes >= 660 && currentMinutes < 810) { 
+                    session = "pagi";
+                } else if (currentMinutes >= 990 && currentMinutes <= 1440) { 
+                    session = "sore";
+                } else {
+                    showToast("Sesi Absen PULANG belum dibuka (Pagi mulai 11:00, Sore mulai 16:30).", "error");
+                    return;
+                }
             }
 
-            const teacherId = document.getElementById('absen-guru-id').value;
-            if (!teacherId) return;
-
-            const currentStatus = document.getElementById('absen-status-hadir').value;
-            const isIzinMode = currentStatus.startsWith("Izin") || currentStatus === "Izin lainnya (tulis)";
-            const isPiket = currentStatus === "Piket";
-
-            if (!isIzinMode && !isPiket && !hasScheduleToday(teacherId, now)) {
+            if (!isIzinMode && !isPiket && !isKodlok && !hasScheduleToday(teacherId, now)) {
                 showToast("Absen Ditolak! Anda tidak memiliki jadwal mengajar pada hari ini.", "error");
                 return;
             }
@@ -2038,7 +1801,7 @@
                 subject: hasCheckedIn.subject,
                 status: hasCheckedIn.status,
                 late_minutes: 0,
-                location: checkResult.locationInfo,
+                location: "Dalam Radius Sekolah",
                 hijri: getHijriParts(now)
             };
 
@@ -2047,7 +1810,7 @@
             
             showToast(`Absen PULANG ${session.toUpperCase()} terekam!`, 'success');
 
-            const alertText = `🚪 <b>Absensi Pulang Baru</b>\n\n👤 Nama: <b>${teacherObj.name}</b>\n⏰ Waktu: ${now.toLocaleTimeString('id-ID')} WIB\n📅 Sesi: ${session.toUpperCase()}\n📍 Lokasi: <i>${checkResult.locationInfo}</i>`;
+            const alertText = `🚪 <b>Absensi Pulang Baru</b>\n\n👤 Nama: <b>${teacherObj.name}</b>\n⏰ Waktu: ${now.toLocaleTimeString('id-ID')} WIB\n📅 Sesi: ${session.toUpperCase()}`;
             
             notifyChannel.postMessage({
                 type: 'absen_pulang',
@@ -2056,7 +1819,7 @@
             });
             sendTelegramAlert(alertText);
 
-            if (currentUser.role === 'GURU') {
+            if (currentUser.role === 'USTADZ') {
                 renderSelfPortal();
             } else {
                 renderAdminPortal();
@@ -2089,7 +1852,10 @@
                 else if (statusText.startsWith('Hadir jam ke 1')) statusText = "Hadir 1";
                 else if (statusText.startsWith('Hadir jam ke 2')) statusText = "Hadir 2";
                 else if (statusText.startsWith('Izin')) statusText = "Izin";
-                else if (statusText === 'Piket') statusText = "Piket";
+                else if (statusText === 'Piket jam ke 1&2') statusText = "Piket 1&2";
+                else if (statusText === 'Piket jam ke 1') statusText = "Piket 1";
+                else if (statusText === 'Piket jam ke 2') statusText = "Piket 2";
+                else if (statusText === 'Kodlok jam 1&2') statusText = "Kodlok 1&2";
 
                 const badgeClass = isHadir 
                     ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
@@ -2123,125 +1889,6 @@
             }).join('');
         }
 
-        window.renderSelfYearlyHistory = function() {
-            const container = document.getElementById('tbl-history-self-yearly');
-            if (!container) return;
-
-            const now = getActiveTime();
-            const activeHijri = getHijriParts(now);
-            
-            const yearLabel = document.getElementById('self-yearly-hijri-label');
-            if (yearLabel) yearLabel.textContent = `${activeHijri.year} H`;
-
-            const filterMonth = document.getElementById('filter-self-month').value;
-            
-            let filtered = records.filter(r => r.teacher_id === currentUser.id && r.hijri.year === activeHijri.year);
-
-            if (filterMonth !== 'all') {
-                const targetMonthNum = parseInt(filterMonth);
-                filtered = filtered.filter(r => r.hijri.month === targetMonthNum);
-            }
-
-            filtered.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            let totalHadir = 0;
-            let totalIzin = 0;
-            let totalLate = 0;
-            let totalHoursDecimal = 0;
-
-            const uniqueDaysSet = new Set();
-
-            filtered.forEach(r => {
-                const dayKey = r.timestamp.split('T')[0];
-                uniqueDaysSet.add(dayKey);
-
-                if (r.status.startsWith('Izin')) {
-                    totalIzin++;
-                } else if (r.status === 'Tidak Hadir') {
-                    totalLate++;
-                } else if (r.type === 'masuk') {
-                    totalHadir++;
-                }
-            });
-
-            uniqueDaysSet.forEach(dStr => {
-                totalHoursDecimal += getTeacherHoursForDay(currentUser.id, dStr);
-            });
-
-            document.getElementById('self-year-hadir-count').textContent = totalHadir;
-            document.getElementById('self-year-izin-count').textContent = totalIzin;
-            document.getElementById('self-year-late-count').textContent = totalLate;
-            document.getElementById('self-year-hours-count').textContent = `${totalHoursDecimal.toFixed(1)}j`;
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="p-6 text-center text-slate-400 text-xs">
-                            Belum ada riwayat aktivitas presensi tahunan untuk kategori filter bulan ini.
-                        </td>
-                    </tr>`;
-                return;
-            }
-
-            container.innerHTML = filtered.map(r => {
-                const timeObj = new Date(r.timestamp);
-                const clock = timeObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + " WIB";
-                const isGregorian = timeObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-                const isHijri = `${r.hijri.day} ${r.hijri.monthName.substring(0,6)}`;
-
-                const isHadir = !r.status.startsWith('Izin') && r.status !== 'Tidak Hadir';
-                
-                let statusText = r.status;
-                if (statusText.startsWith('Hadir jam ke 1&2')) statusText = "Hadir 1&2";
-                else if (statusText.startsWith('Hadir jam ke 1')) statusText = "Hadir 1";
-                else if (statusText.startsWith('Hadir jam ke 2')) statusText = "Hadir 2";
-                else if (statusText.startsWith('Izin')) statusText = "Izin";
-                else if (statusText === 'Piket') statusText = "Piket";
-
-                const badgeClass = isHadir 
-                    ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
-                    : 'bg-rose-100 text-rose-800 border-rose-200';
-
-                let lateBadge = "";
-                if (r.late_minutes && r.late_minutes > 0 && isHadir) {
-                    lateBadge = `<span class="bg-orange-100 text-orange-700 border-orange-200 border text-[9px] px-1.5 py-0.5 rounded-full font-bold ml-1">Terlambat ${r.late_minutes}m</span>`;
-                }
-
-                const tmEquivalent = getJumlahTatapMuka(r.status);
-
-                let detailHtml = `Kelas: <strong class="text-slate-700">${r.class || '-'}</strong> | Mapel: <strong class="text-slate-700">${r.subject || '-'}</strong>`;
-                if (r.status === 'Izin' && r.izin_reason) {
-                    detailHtml += `<br><span class="text-[10px] text-rose-600 italic">Alasan: ${r.izin_reason}</span>`;
-                }
-
-                return `
-                    <tr class="hover:bg-slate-50/50 transition">
-                        <td class="p-3">
-                            <div class="flex flex-col">
-                                <span class="text-xs font-bold text-slate-800">${clock}</span>
-                                <span class="text-[9px] text-slate-400 leading-none mt-0.5">${isGregorian} / <span class="text-emerald-600 font-extrabold">${isHijri}</span></span>
-                            </div>
-                        </td>
-                        <td class="p-3">
-                            <span class="text-[10px] uppercase tracking-wider text-slate-400 font-extrabold">Masuk ${r.session} (${r.type})</span>
-                        </td>
-                        <td class="p-3 text-xs text-slate-500">
-                            ${detailHtml}
-                        </td>
-                        <td class="p-3 text-center">
-                            <span class="bg-slate-100 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-black font-mono">${tmEquivalent} TM</span>
-                        </td>
-                        <td class="p-3 text-center">
-                            <div class="flex items-center justify-center gap-1">
-                                <span class="${badgeClass} border text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider">${statusText}</span>
-                                ${lateBadge}
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        };
-
         // --- 8. ADMIN DASHBOARD & CMS LOGIC ---
         function renderAdminPortal() {
             if (!currentUser || currentUser.role !== 'ADMIN') return;
@@ -2259,8 +1906,150 @@
             renderCMSIdentityFields();
             loadTelegramConfig(); 
             renderDailyScheduleBoard();
-            renderSchoolGeofencingFields(); 
+
+            // SINKRONISASI PETA GEOFENCE SAAT MEMBUKA PANEL ADMIN
+            initGeofenceMap();
         }
+
+        // ==============================================================
+        // INSIALISASI DAN PENGELOLAAN LOKASI PETA INTERAKTIF
+        // ==============================================================
+        function initGeofenceMap() {
+            const lat = configGeofence.lat || -7.250445;
+            const lng = configGeofence.lng || 112.768845;
+            const radius = configGeofence.radius || 100;
+
+            document.getElementById('settings-lat').value = lat;
+            document.getElementById('settings-lng').value = lng;
+            document.getElementById('settings-radius').value = radius;
+
+            setTimeout(() => {
+                const mapContainer = document.getElementById('geofence-map');
+                if (!mapContainer) return;
+
+                if (!mapInstance) {
+                    // Buat instance Leaflet Map di container
+                    mapInstance = L.map('geofence-map').setView([lat, lng], 16);
+                    
+                    // Gunakan Tile Standard OpenStreetMap
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(mapInstance);
+
+                    // Buat Draggable Marker
+                    mapMarker = L.marker([lat, lng], { draggable: true }).addTo(mapInstance);
+                    mapMarker.bindPopup("<b>Titik Pusat Absensi</b><br>Seret pin ini ke lokasi pesantren Anda.").openPopup();
+
+                    // Buat Area Wilayah Lingkaran Geofence
+                    mapCircle = L.circle([lat, lng], {
+                        color: '#10b981',
+                        fillColor: '#10b981',
+                        fillOpacity: 0.15,
+                        radius: radius
+                    }).addTo(mapInstance);
+
+                    // Sinkronisasi Marker Saat Digeser (Drag)
+                    mapMarker.on('dragend', function(e) {
+                        const position = mapMarker.getLatLng();
+                        updateGeofenceCoordinates(position.lat, position.lng);
+                    });
+
+                    // Sinkronisasi Klik Peta Langsung
+                    mapInstance.on('click', function(e) {
+                        mapMarker.setLatLng(e.latlng);
+                        updateGeofenceCoordinates(e.latlng.lat, e.latlng.lng);
+                    });
+                } else {
+                    // Update Map View Berjalan
+                    mapInstance.setView([lat, lng]);
+                    mapMarker.setLatLng([lat, lng]);
+                    mapCircle.setLatLng([lat, lng]);
+                    mapCircle.setRadius(radius);
+                }
+
+                mapInstance.invalidateSize();
+            }, 100);
+        }
+
+        function updateGeofenceCoordinates(lat, lng) {
+            document.getElementById('settings-lat').value = lat.toFixed(6);
+            document.getElementById('settings-lng').value = lng.toFixed(6);
+            configGeofence.lat = parseFloat(lat.toFixed(6));
+            configGeofence.lng = parseFloat(lng.toFixed(6));
+            
+            if (mapCircle) {
+                mapCircle.setLatLng([lat, lng]);
+            }
+            window.saveGeofenceSettings(false);
+        }
+
+        window.saveGeofenceSettings = function(showAlert = true) {
+            const latVal = parseFloat(document.getElementById('settings-lat').value);
+            const lngVal = parseFloat(document.getElementById('settings-lng').value);
+            const radiusVal = parseInt(document.getElementById('settings-radius').value);
+
+            if (isNaN(latVal) || isNaN(lngVal) || isNaN(radiusVal) || radiusVal <= 0) {
+                if (showAlert) showToast("Koordinat Lintang/Bujur atau Radius tidak boleh kosong!", "error");
+                return;
+            }
+
+            configGeofence.lat = latVal;
+            configGeofence.lng = lngVal;
+            configGeofence.radius = radiusVal;
+
+            if (mapMarker) mapMarker.setLatLng([latVal, lngVal]);
+            if (mapCircle) {
+                mapCircle.setLatLng([latVal, lngVal]);
+                mapCircle.setRadius(radiusVal);
+            }
+            if (mapInstance) mapInstance.setView([latVal, lngVal]);
+
+            window.saveDataToStorage();
+            
+            if (showAlert) {
+                showToast("Pengaturan Geofence Absensi Berhasil Diperbarui!", "success");
+            }
+        };
+
+        window.detectCurrentLocation = function() {
+            if (!navigator.geolocation) {
+                showToast("Perangkat Anda tidak mendukung deteksi lokasi otomatis.", "error");
+                return;
+            }
+            
+            const btn = document.querySelector("button[onclick='window.detectCurrentLocation()']");
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Mendeteksi GPS...`;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    document.getElementById('settings-lat').value = lat.toFixed(6);
+                    document.getElementById('settings-lng').value = lng.toFixed(6);
+                    
+                    if (mapInstance) {
+                        mapInstance.setView([lat, lng], 17);
+                        mapMarker.setLatLng([lat, lng]);
+                        mapCircle.setLatLng([lat, lng]);
+                    }
+
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    showToast("Koordinat GPS lokasi Anda berhasil diselaraskan!", "success");
+                    window.saveGeofenceSettings(false);
+                },
+                (error) => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                    showToast("Gagal mendeteksi lokasi. Pastikan izin GPS perangkat Anda aktif.", "error");
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        };
 
         function renderDashboardStats() {
             const now = getActiveTime();
@@ -2362,7 +2151,7 @@
             }
 
             container.innerHTML = filtered.map(r => {
-                const t = teachers.find(g => g.id === r.teacher_id) || { name: 'Dihapus', idCard: '-', photo: '' };
+                const t = teachers.find(g => g.id === r.teacher_id) || { name: 'Dihapus', nip: '-', photo: '' };
                 const timeObj = new Date(r.timestamp);
                 const clock = timeObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
                 const isGregorian = timeObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -2376,6 +2165,7 @@
                 else if (statusText.startsWith('Hadir jam ke 2')) statusText = "Hadir 2";
                 else if (statusText.startsWith('Izin')) statusText = "Izin";
                 else if (statusText === 'Piket') statusText = "Piket";
+                else if (statusText === 'Kodlok jam 1&2') statusText = "Kodlok 1&2";
 
                 const badgeClass = isHadir 
                     ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
@@ -2395,10 +2185,10 @@
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3 pr-16">
                             <div class="flex items-center gap-3">
-                                <img src="${t.photo || 'https://placehold.co/80x80/cbd5e1/64748b?text=...'}" class="w-8 h-8 rounded-full object-cover border">
+                                <img src="${t.photo || 'https://placehold.co/80x80/cbd5e1/64748b?text=...'}" class="w-8 h-8 rounded-full object-cover border border-white shadow-sm">
                                 <div>
                                     <h5 class="text-xs font-bold text-slate-800 leading-tight">${t.name}</h5>
-                                    <span class="text-[9px] text-slate-400">ID: ${t.idCard}</span>
+                                    <span class="text-[9px] text-slate-400">NIP: ${t.nip}</span>
                                 </div>
                             </div>
                         </td>
@@ -2681,7 +2471,7 @@
             }).join('');
         }
 
-        // --- 9.1 PAPAN JADWAL MENGAJAR HARI INI (REAKTIF AKTIF) ---
+        // --- 9.1 PAPAN JADWAL MENGAJAR HARI INI ---
         function renderDailyScheduleBoard() {
             const daysEng = ["minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
             const daysInd = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -2762,7 +2552,7 @@
                                 <h5 class="text-xs font-bold text-slate-800 leading-tight">${t.name}</h5>
                             </div>
                         </td>
-                        <td class="p-3 text-xs font-mono text-slate-500">${t.idCard || t.nip}</td>
+                        <td class="p-3 text-xs font-mono text-slate-500">${t.nip}</td>
                         <td class="p-3 text-xs text-slate-500">${t.role}</td>
                         <td class="p-3 text-xs text-slate-500">
                             Kelas: <strong class="text-slate-700">${t.class_default || '-'}</strong><br>Mapel: <strong class="text-slate-700">${t.subject_default || '-'}</strong>
@@ -2817,12 +2607,7 @@
                 if (t) {
                     document.getElementById('form-guru-id').value = t.id;
                     document.getElementById('form-guru-name').value = t.name;
-                    
-                    const nipField = document.getElementById('form-guru-nip');
-                    if (nipField) {
-                        nipField.value = t.nip || t.idCard || "";
-                    }
-                    
+                    document.getElementById('form-guru-nip').value = t.nip;
                     document.getElementById('form-guru-role').value = t.role;
                     document.getElementById('form-guru-password').value = t.password;
                     document.getElementById('form-guru-class-default').value = t.class_default || "";
@@ -2907,8 +2692,7 @@
             e.preventDefault();
             const id = document.getElementById('form-guru-id').value;
             const name = document.getElementById('form-guru-name').value;
-            const nipField = document.getElementById('form-guru-nip');
-            const nip = nipField ? nipField.value.trim() : "";
+            const nip = document.getElementById('form-guru-nip').value;
             const role = document.getElementById('form-guru-role').value;
             const pass = document.getElementById('form-guru-password').value;
             const classDef = document.getElementById('form-guru-class-default').value;
@@ -2928,7 +2712,6 @@
                 if (t) {
                     t.name = name;
                     t.nip = nip;
-                    t.idCard = nip; 
                     t.role = role;
                     t.password = pass;
                     t.class_default = classDef;
@@ -2942,7 +2725,6 @@
                     id: "T-" + Date.now(),
                     name: name,
                     nip: nip,
-                    idCard: nip, 
                     role: role,
                     password: pass,
                     class_default: classDef,
@@ -2960,7 +2742,7 @@
         };
 
         window.deleteTeacher = function(id) {
-            const t = teachers.find(g => g.id === id);
+            const t = teachers.find(g => g.id !== id);
             if (!t) return;
 
             openConfirmDelete(`Apakah Anda yakin ingin menghapus data guru "${t.name}" beserta seluruh riwayat absensinya?`, () => {
@@ -2990,7 +2772,7 @@
             confirmAction = null;
         };
 
-        // --- 12. LOGO MANIPULATION (CROPPER.JS IMPLEMENTATION) ---
+        // --- 12. LOGO MANIPULATION (CROPPER.JS) ---
         window.handleLogoUpload = function(input, type) {
             cropTargetType = type;
             if (input.files && input.files[0]) {
@@ -3106,7 +2888,7 @@
 
             const imgL = document.getElementById('login-logo');
             const fallL = document.getElementById('login-logo-fallback');
-            const textL = document.getElementById('login-logo-container');
+            const contL = document.getElementById('login-logo-container');
             const previewL = document.getElementById('setting-logo-login-preview');
             const previewFallL = document.getElementById('setting-logo-login-preview-fallback');
             const previewContL = document.getElementById('setting-logo-login-preview-container');
@@ -3115,7 +2897,7 @@
                 imgL.src = logoLogin;
                 imgL.classList.remove('hidden');
                 fallL.classList.add('hidden');
-                textL.className = "w-[74px] h-[74px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-0";
+                contL.className = "w-[77px] h-[77px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-0";
 
                 if (previewL) {
                     previewL.src = logoLogin;
@@ -3126,7 +2908,7 @@
             } else {
                 imgL.classList.add('hidden');
                 fallL.classList.remove('hidden');
-                textL.className = "w-[74px] h-[74px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-4";
+                contL.className = "w-[77px] h-[77px] rounded-full bg-white/15 border-2 border-white/20 flex items-center justify-center overflow-hidden p-4";
 
                 if (previewL) {
                     previewL.classList.add('hidden');
@@ -3136,9 +2918,9 @@
             }
         }
 
-        // --- CMS INSTANSI PENAMAAN IDENTITY ---
+        // --- 13. CMS INSTANSI PENAMAAN IDENTITY ---
         function renderCMSIdentityFields() {
-            const currentTitle = localStorage.getItem('sadig_title') || "Sadig";
+            const currentTitle = localStorage.getItem('sadig_title') || "PPT DIGITAL SYSTEMS™";
             const currentSubtitle = localStorage.getItem('sadig_subtitle') || "Pondok Pesantren Tholabuddin";
 
             document.getElementById('setting-app-title').value = currentTitle;
@@ -3164,101 +2946,7 @@
             renderCMSIdentityFields();
         };
 
-        // --- GEOFENCING CONFIGURATION SAVER ---
-        function initSchoolMap() {
-            const lat = schoolConfig.lat;
-            const lng = schoolConfig.lng;
-            const radius = schoolConfig.radius;
-
-            if (schoolMap) {
-                schoolMap.setView([lat, lng], 16);
-                schoolMarker.setLatLng([lat, lng]);
-                geofenceCircle.setLatLng([lat, lng]);
-                geofenceCircle.setRadius(radius);
-                return;
-            }
-
-            schoolMap = L.map('school-geofence-map').setView([lat, lng], 16);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(schoolMap);
-
-            schoolMarker = L.marker([lat, lng], { draggable: true }).addTo(schoolMap);
-
-            geofenceCircle = L.circle([lat, lng], {
-                color: '#10b981',
-                fillColor: '#10b981',
-                fillOpacity: 0.2,
-                radius: radius
-            }).addTo(schoolMap);
-
-            schoolMarker.on('drag', function (e) {
-                const pos = schoolMarker.getLatLng();
-                document.getElementById('setting-school-lat').value = pos.lat.toFixed(6);
-                document.getElementById('setting-school-lng').value = pos.lng.toFixed(6);
-                geofenceCircle.setLatLng(pos);
-            });
-
-            schoolMap.on('click', function (e) {
-                const pos = e.latlng;
-                schoolMarker.setLatLng(pos);
-                geofenceCircle.setLatLng(pos);
-                document.getElementById('setting-school-lat').value = pos.lat.toFixed(6);
-                document.getElementById('setting-school-lng').value = pos.lng.toFixed(6);
-            });
-        }
-
-        window.updateMapFromInputs = function() {
-            const lat = parseFloat(document.getElementById('setting-school-lat').value);
-            const lng = parseFloat(document.getElementById('setting-school-lng').value);
-
-            if (!isNaN(lat) && !isNaN(lng) && schoolMarker && geofenceCircle) {
-                const newPos = [lat, lng];
-                schoolMarker.setLatLng(newPos);
-                geofenceCircle.setLatLng(newPos);
-                schoolMap.setView(newPos);
-            }
-        };
-
-        window.updateMapRadiusFromInput = function() {
-            const r = parseInt(document.getElementById('setting-school-radius').value);
-            if (!isNaN(r) && r > 0 && geofenceCircle) {
-                geofenceCircle.setRadius(r);
-            }
-        };
-
-        function renderSchoolGeofencingFields() {
-            document.getElementById('setting-school-lat').value = schoolConfig.lat;
-            document.getElementById('setting-school-lng').value = schoolConfig.lng;
-            document.getElementById('setting-school-radius').value = schoolConfig.radius;
-
-            setTimeout(() => {
-                initSchoolMap();
-                if (schoolMap) {
-                    schoolMap.invalidateSize();
-                }
-            }, 100);
-        }
-
-        window.saveSchoolGeofencing = function() {
-            const lat = parseFloat(document.getElementById('setting-school-lat').value);
-            const lng = parseFloat(document.getElementById('setting-school-lng').value);
-            const radius = parseInt(document.getElementById('setting-school-radius').value);
-
-            if (isNaN(lat) || isNaN(lng) || isNaN(radius) || radius <= 0) {
-                showToast("Format koordinat atau radius salah! Periksa kembali input Anda.", "error");
-                return;
-            }
-
-            schoolConfig = { lat, lng, radius };
-            localStorage.setItem('sadig_school_config', JSON.stringify(schoolConfig));
-            showToast("Batas Geofencing GPS Sekolah berhasil diperbarui secara permanen!", "success");
-            renderSchoolGeofencingFields();
-        };
-
-        // --- ADMIN PASSWORD UPDATE CMS ---
+        // --- 14. ADMIN PASSWORD UPDATE CMS ---
         window.handleSettingsPasswordAdmin = function(e) {
             e.preventDefault();
             const currentStoredPass = localStorage.getItem('sadig_admin_pw') || 'admin123';
@@ -3288,7 +2976,7 @@
             document.getElementById('form-settings-pw-admin').reset();
         };
 
-        // --- TELEGRAM BOT INTEGRATION SETTINGS HANDLER ---
+        // --- 14.1 TELEGRAM BOT INTEGRATION SETTINGS HANDLER ---
         window.toggleTelegramStatus = function() {
             const enableChk = document.getElementById('setting-telegram-enable').checked;
             const wrapper = document.getElementById('wrapper-telegram-config');
@@ -3369,7 +3057,7 @@
             }
         }
 
-        // --- EKSPOR DATA KE CSV ---
+        // --- 15. EKSPOR DATA KE CSV ---
         window.exportToCSV = function() {
             if (records.length === 0) {
                 showToast("Tidak ada data log riwayat yang bisa diekspor.", "error");
@@ -3377,10 +3065,10 @@
             }
 
             let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "ID Presensi,ID Guru,Nama Guru,Waktu Log,Hari Gregorian,Tanggal Hijriyah,Sesi Kerja,Kelas,Mata Pelajaran,Status,Menit Terlambat,Lokasi\n";
+            csvContent += "ID Presensi,NIP,Nama Guru,Waktu Log,Hari Gregorian,Tanggal Hijriyah,Sesi Kerja,Kelas,Mata Pelajaran,Status,Menit Terlambat,Lokasi\n";
 
             records.forEach(r => {
-                const t = teachers.find(x => x.id === r.teacher_id) || { name: 'Dihapus', idCard: '-' };
+                const t = teachers.find(x => x.id === r.teacher_id) || { name: 'Dihapus', nip: '-' };
                 const timeObj = new Date(r.timestamp);
                 const clock = timeObj.toLocaleTimeString('id-ID');
                 const isGreg = timeObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -3388,7 +3076,7 @@
 
                 const row = [
                     r.id,
-                    t.idCard,
+                    t.nip,
                     `"${t.name.replace(/"/g, '""')}"`,
                     clock,
                     `"${isGreg}"`,
@@ -3414,7 +3102,7 @@
             showToast("Unduhan laporan log sukses!", "success");
         };
 
-        // --- DEVELOPER TESTING TOOLS (SIMULATOR) ---
+        // --- 16. DEVELOPER TESTING TOOLS (SIMULATOR) ---
         window.setSimulatedGPS = function(status) {
             simulatedGPS = status;
             localStorage.setItem('sadig_sim_gps', status);
@@ -3433,30 +3121,6 @@
             }
         };
 
-        window.setGPSMode = function(mode) {
-            gpsMode = mode;
-            localStorage.setItem('sadig_gps_mode', mode);
-
-            const btnReal = document.getElementById('btn-mode-real');
-            const btnSim = document.getElementById('btn-mode-sim');
-            const simControls = document.getElementById('sim-gps-controls');
-            const realInfo = document.getElementById('real-gps-info');
-
-            if (mode === 'real') {
-                btnReal.className = "w-1/2 bg-emerald-600 text-white font-bold py-1 px-1 rounded-md text-[8px] transition uppercase shadow-sm";
-                btnSim.className = "w-1/2 bg-transparent text-slate-400 hover:text-slate-200 font-bold py-1 px-1 rounded-md text-[8px] transition uppercase";
-                simControls.classList.add('hidden');
-                realInfo.classList.remove('hidden');
-                showToast("Mode Deteksi GPS diubah ke GPS FISIK (RIIL).", "info");
-            } else {
-                btnSim.className = "w-1/2 bg-emerald-600 text-white font-bold py-1 px-1 rounded-md text-[8px] transition uppercase shadow-sm";
-                btnReal.className = "w-1/2 bg-transparent text-slate-400 hover:text-slate-200 font-bold py-1 px-1 rounded-md text-[8px] transition uppercase";
-                simControls.classList.remove('hidden');
-                realInfo.classList.add('hidden');
-                showToast("Mode Deteksi GPS diubah ke SIMULASI (Override).", "info");
-            }
-        };
-
         window.setSimulatedTime = function(timeStr) {
             simulatedTime = timeStr;
             localStorage.setItem('sadig_sim_time', timeStr);
@@ -3464,7 +3128,7 @@
             updateClock();
             showToast(`Simulasi Waktu diubah menjadi: ${timeStr} WIB`, "success");
 
-            if (currentUser && currentUser.role === 'GURU') {
+            if (currentUser && currentUser.role === 'USTADZ') {
                 handleAbsenTeacherSelect(currentUser.id);
             } else if (currentUser && currentUser.role === 'ADMIN') {
                 renderDailyScheduleBoard(); 
@@ -3478,7 +3142,7 @@
             updateClock();
             showToast("Waktu dikembalikan sesuai jam asli komputer.", "success");
 
-            if (currentUser && currentUser.role === 'GURU') {
+            if (currentUser && currentUser.role === 'USTADZ') {
                 handleAbsenTeacherSelect(currentUser.id);
             } else if (currentUser && currentUser.role === 'ADMIN') {
                 renderDailyScheduleBoard(); 
@@ -3502,6 +3166,7 @@
         function saveDataToLocalStorage() {
             localStorage.setItem('sadig_teachers', JSON.stringify(teachers));
             localStorage.setItem('sadig_records', JSON.stringify(records));
+            localStorage.setItem('sadig_geofence', JSON.stringify(configGeofence));
         }
 
         // --- 18. SYSTEM RUNTIME BOOTSTRAPPING (ONLOAD) ---
@@ -3511,7 +3176,6 @@
 
             updateAppLogos();
             setSimulatedGPS(simulatedGPS);
-            setGPSMode(gpsMode); 
 
             if (simulatedTime) {
                 document.getElementById('sim-time-indicator').textContent = simulatedTime + " WIB";
